@@ -25,10 +25,21 @@ class TaskController {
         return res.status(200).json(row);
     }
 
+    async updateTask(req, res) {
+        const data = req.body;
+        const { id } = req.params;
+
+        const sqlUpdateTask = `UPDATE task SET title = ?, description = ?, tagID = ?, priorityID = ? WHERE taskID = ?`;
+        const [row] = await db.promise().query(sqlUpdateTask, [data.title, data.description, data.tagID, data.priorityID, id]);
+        return res.status(200).json(row);
+    }
+
     async updateFavoriteTask(req, res) {
-        const { taskID, favorite } = req.body;
+        const { favorite } = req.body;
+        const { id } = req.params;
+
         const sqlFavoriteTask = `UPDATE task SET favorite = ? WHERE taskID = ?`;
-        const [row] = await db.promise().query(sqlFavoriteTask, [favorite, taskID]);
+        const [row] = await db.promise().query(sqlFavoriteTask, [favorite, id]);
         return res.status(200).json(row);
     }
 }
