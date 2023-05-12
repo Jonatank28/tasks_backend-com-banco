@@ -7,7 +7,8 @@ const taskController = new TaskController();
 const route = '/tasks';
 
 taskRoutes.get(`${route}`, taskController.getDataTasks);
-taskRoutes.post(`${route}`, taskController.updateFavoriteTask);
+taskRoutes.post(`${route}`, taskController.createTask);
+taskRoutes.put(`${route}/favorite`, taskController.updateFavoriteTask);
 taskRoutes.delete(`${route}/:id`, taskController.deleteTask);
 
 module.exports = taskRoutes;
