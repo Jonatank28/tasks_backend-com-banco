@@ -14,8 +14,20 @@ class TaskController {
 
     async getDataTasks(req, res) {
         const sqlGetTasks = `SELECT * FROM task`;
-        const [row] = await db.promise().query(sqlGetTasks);
-        return res.status(200).json(row);
+        const sqlCountTasks = `SELECT COUNT(*) FROM task`;
+        const sqlCountTasksOpen = `SELECT COUNT(*) FROM task WHERE finished = 0`;
+        const sqlCountTasksFinished = `SELECT COUNT(*) FROM task WHERE finished = 1`;
+        const [getTasks] = await db.promise().query(sqlGetTasks);
+        const [countTasks] = await db.promise().query(sqlCountTasks);
+        const [countTasksOpen] = await db.promise().query(sqlCountTasksOpen);
+        const [countTasksFinished] = await db.promise().query(sqlCountTasksFinished);
+        const data = {
+            tasks: getTasks,
+            count: countTasks[0]['COUNT(*)'],
+            countOpen: countTasksOpen[0]['COUNT(*)'],
+            countFinished: countTasksFinished[0]['COUNT(*)']
+        }
+        return res.status(200).json(data);
     }
 
     async deleteTask(req, res) {
